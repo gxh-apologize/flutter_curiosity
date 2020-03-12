@@ -37,7 +37,7 @@ class FileUtils {
     }
     
     /** 计算文件夹或者文件的大小 */
-    class  func getFilePathSize(path: String)-> String
+    class func getFilePathSize(path: String)-> String
     {
         if path.count == 0 {
             return "0MB" as String
@@ -66,7 +66,7 @@ class FileUtils {
     }
     
     /**  计算单个文件或文件夹的大小 */
-    class  func fileSizeAtPath(filePath:String) -> Float {
+    class func fileSizeAtPath(filePath:String) -> Float {
         var fileSize:Float = 0.0
         if fileManager.fileExists(atPath: filePath) {
             do {
@@ -84,8 +84,7 @@ class FileUtils {
     }
     
     //获取目录下所有文件和文件夹名字
-    class func getDirectoryAllName(arguments: Any) -> [AnyHashable] {
-        let path = arguments["path"] as! String
+    class func getDirectoryAllName(path: String) -> [AnyHashable] {
         var nameList: [AnyHashable] = []
         if !isDirectoryExist(path: path) {
             nameList.append("path not exist")

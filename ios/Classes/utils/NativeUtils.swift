@@ -46,8 +46,7 @@ class NativeUtils  {
     
     //跳转到AppStore
     class func goToMarket(id: String) {
-    
-        let url = "itms-apps://itunes.apple.com/us/app/id"+call.arguments!["packageName"] as! String
+        let url = "itms-apps://itunes.apple.com/us/app/id"+id
         UIApplication.shared.openURL(URL(string: url)!)
         
     }

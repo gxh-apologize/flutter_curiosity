@@ -3,11 +3,11 @@ import Flutter
 
 
 class ScanView: UIView,AVCaptureMetadataOutputObjectsDelegate {
-    private let scanEvent = ScanEventStreamHandler()
-    private var session: AVCaptureSession
-    private var methodChannel: FlutterMethodChannel
-    private var captureLayer: AVCaptureVideoPreviewLayer
-    private var device: AVCaptureDevice
+     let scanEvent = ScanEventStreamHandler()
+     var session: AVCaptureSession
+     var methodChannel: FlutterMethodChannel
+     var captureLayer: AVCaptureVideoPreviewLayer
+     var device: AVCaptureDevice
     
     init(frame: CGRect, viewIdentifier viewId: Int64, arguments args: Any?, binaryMessenger: (NSObjectProtocol & FlutterBinaryMessenger)?) {
         let methodchannelName = String(format: "scanView/%lld/method", viewId)
@@ -16,11 +16,11 @@ class ScanView: UIView,AVCaptureMetadataOutputObjectsDelegate {
         methodChannel = FlutterMethodChannel(name: methodchannelName, binaryMessenger: binaryMessenger!)
         eventChannel.setStreamHandler((scanEvent as! FlutterStreamHandler & NSObjectProtocol))
         
-//        weak var weakSelf = self
-//        weakSelf.channel.methodCallHandler = { call, result in
-//            weakSelf.on(call, result: result)
-//        }
-
+        //        weak var weakSelf = self
+        //        weakSelf.channel.methodCallHandler = { call, result in
+        //            weakSelf.on(call, result: result)
+        //        }
+        
         captureLayer = AVCaptureVideoPreviewLayer(session: session)
         captureLayer.backgroundColor = UIColor.black.cgColor
         captureLayer.addSublayer(captureLayer)
@@ -42,11 +42,11 @@ class ScanView: UIView,AVCaptureMetadataOutputObjectsDelegate {
         output.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
         output.metadataObjectTypes = [.aztec, .code39,.code93, .code128,.dataMatrix,.ean8,.ean13,.itf14,.pdf417,.qr,.upce]
         startScan()
-//        return self
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+    
     }
     
     override func layoutSubviews() {
@@ -55,9 +55,9 @@ class ScanView: UIView,AVCaptureMetadataOutputObjectsDelegate {
     }
     
     
-     func handle( call: FlutterMethodCall, result: FlutterResult) {
+    func handle( call: FlutterMethodCall, result: FlutterResult) {
         if (call.method == "startScan") {
-            startScan()
+            self.startScan()
             result(nil)
         } else if (call.method == "stopScan") {
             pause()
@@ -66,7 +66,7 @@ class ScanView: UIView,AVCaptureMetadataOutputObjectsDelegate {
             let status = (call.arguments as AnyObject).value(forKey: "status") as? NSNumber
             result(NSNumber(value: status?.boolValue ?? false))
         } else if (call.method == "getFlashMode") {
-            result(NSNumber(value: getFlashMode()))
+            result(NSNumber(value: self.getFlashMode()))
         } else {
             result(FlutterMethodNotImplemented)
         }
@@ -122,8 +122,8 @@ class ScanView: UIView,AVCaptureMetadataOutputObjectsDelegate {
             let data = metadataObjects[0] as? AVMetadataMachineReadableCodeObject
             let value = data?.stringValue
             if (value?.count ?? 0) != 0  {
-                scanEvent.sendEvent(event: ScanUtils.scanDataToMap(data))
-            
+                scanEvent.sendEvent(event: ScanUtils.scanDataToMap(data: data!))
+                
             }
         }
     }

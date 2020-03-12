@@ -3,21 +3,15 @@ import AVFoundation
 import Flutter
 class ScanUtils {
     //本地图片识别
-    public func scanImagePath(call: FlutterMethodCall, result: FlutterResult) {
-        let path = call.arguments("path")
-        if (path is NSNull) {
-            result(nil)
-            return
-        }
+    class func scanImagePath(path: String, result: FlutterResult) {
         //加载文件
-        let fh = FileHandle(forReadingAtPath: path ?? "")
+        let fh = FileHandle(forReadingAtPath: path )
         let data = fh?.readDataToEndOfFile()
-        result(self.getCode(data))
+        result(getCode(data: data!))
     }
     //图片urls识别
-    public  func scanImageUrl(call: FlutterMethodCall, result: FlutterResult) {
-        let url = call.arguments(forKey: "url")
-        let nsUrl = URL(string: url ?? "")
+    class func scanImageUrl(url: String, result: FlutterResult) {
+        let nsUrl = URL(string: url )
         var data: Data? = nil
         do {
             if let nsUrl = nsUrl {
@@ -25,20 +19,17 @@ class ScanUtils {
             }
         } catch {
         }
-        result(self.getCode(data))
+        result(getCode(data: data!))
     }
     //内存图片识别
-    public func scanImageMemory(call: FlutterMethodCall, result: FlutterResult) {
-        let uint8list = call.arguments.value(forKey: "uint8list") as? FlutterStandardTypedData
-        result(self.getCode(uint8list?.data))
+    class func scanImageMemory(uint8list: FlutterStandardTypedData, result: FlutterResult) {
+//       let uint8list = call.arguments.value(forKey: "") as? FlutterStandardTypedData
+        result(getCode(data: uint8list.data))
     }
     //获取二维码数据
-    public  func getCode(data: Data) -> [AnyHashable : Any] {
-        if data != nil {
-            var detectImage: CIImage? = nil
-            if let data = data {
-                detectImage = CIImage(data: data)
-            }
+    class func getCode(data: Data) -> [AnyHashable : Any] {
+       
+        let detectImage = CIImage(data: data)
             let detector = CIDetector(ofType: CIDetectorTypeQRCode, context: nil, options: [
                 CIDetectorAccuracy: CIDetectorAccuracyHigh
             ])
@@ -46,9 +37,7 @@ class ScanUtils {
             if let detectImage = detectImage {
                 feature = detector?.features(in: detectImage, options: nil)
             }
-            if feature?.count == 0 {
-                return nil
-            } else {
+            if feature?.count != 0 {
                 for index in 0..<(feature?.count ?? 0) {
                     let qrCode = feature?[index] as? CIQRCodeFeature
                     let resultStr = qrCode?.messageString
@@ -60,18 +49,14 @@ class ScanUtils {
                     }
                 }
             }
-        }
-        return nil
+         return [:]
     }
     
     //二维码数据转换
-    public func scanDataToMap(data: AVMetadataMachineReadableCodeObject) -> [AnyHashable : Any] {
-        if data == nil {
-            return nil
-        }
+    class func scanDataToMap(data: AVMetadataMachineReadableCodeObject) -> [AnyHashable : Any] {
         var result: [AnyHashable : Any] = [:]
-        result["code"] = data?.stringValue
-        result["type"] = data?.type
+        result["code"] = data.stringValue
+        result["type"] = data.type
         return result
     }
     

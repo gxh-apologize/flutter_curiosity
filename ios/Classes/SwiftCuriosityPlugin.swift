@@ -31,9 +31,9 @@ public class SwiftCuriosityPlugin: NSObject, FlutterPlugin {
     
     func gallery(arguments: [AnyHashable : Any], result: FlutterResult) {
         if ("openPicker" == call.method) {
-            PicturePicker.openPicker(arguments: arguments, viewController: viewController, result: result)
+            PicturePicker.openPicker(arguments, viewController, result)
         } else if ("openCamera" == call.method) {
-            PicturePicker.openCamera(arguments: arguments, viewController: viewController, result: result)
+            PicturePicker.openCamera(arguments, viewController, result)
         } else if ("deleteCacheDirFile" == call.method) {
             PicturePicker.deleteCacheDirFile()
         }
@@ -41,11 +41,11 @@ public class SwiftCuriosityPlugin: NSObject, FlutterPlugin {
     func scan(arguments: [AnyHashable : Any],result: FlutterResult) {
         
         if ("scanImagePath" == call.method) {
-            ScanUtils.scanImagePath(path: arguments["path"] as! String, result: result)
+            ScanUtils.scanImagePath(arguments["path"] as! String, result)
         } else if ("scanImageUrl" == call.method) {
-            ScanUtils.scanImageUrl(url: arguments["url"] as! String, result: result)
+            ScanUtils.scanImageUrl(arguments["url"] as! String, result)
         }else if ("scanImageMemory" == call.method) {
-            ScanUtils.scanImageMemory(uint8list:arguments["uint8list"] as! FlutterStandardTypedData, result: result)
+            ScanUtils.scanImageMemory(arguments["uint8list"] as! FlutterStandardTypedData, result)
         }
     }
     func utils(arguments: [AnyHashable : Any],result: FlutterResult) {
@@ -56,23 +56,26 @@ public class SwiftCuriosityPlugin: NSObject, FlutterPlugin {
             result(NativeUtils.getAllCookie())
         } else if ("getFilePathSize" == call.method) {
             
-            result(FileUtils.getFilePathSize(path: arguments["filePath"] as! String))
+            result(FileUtils.getFilePathSize(arguments["filePath"] as! String))
         } else if ("deleteDirectory" == call.method) {
-            FileUtils.deleteDirectory(path: arguments["directoryPath"] as! String)
+            FileUtils.deleteDirectory(arguments["directoryPath"] as! String)
             result("success")
         } else if ("deleteFile" == call.method) {
-            FileUtils.deleteFile(path: arguments["filePath"]as! String)
+            FileUtils.deleteFile(arguments["filePath"]as! String)
             result("success")
         } else if ("unZipFile" == call.method) {
-            FileUtils.unZipFile(filePath: (arguments["filePath"]as? String)!)
+            FileUtils.unZipFile((arguments["filePath"]as? String)!)
             result("success")
         } else if ("goToMarket" == call.method) {
-            NativeUtils.goToMarket(id: arguments["packageName"] as! String )
+            NativeUtils.goToMarket(arguments["packageName"] as! String )
             result("success")
         }  else if ("getAppInfo" == call.method) {
             result(NativeUtils.getAppInfo())
         } else if ("getDirectoryAllName" == call.method) {
-            result(FileUtils.getDirectoryAllName(path : arguments["path"] as! String))
+            result(FileUtils.getDirectoryAllName(arguments["path"] as! String))
+        } else if ("callPhone" == call.method) {
+            NativeUtils.callPhone(arguments["phoneNumber"] as? String, arguments["directDial"] as! Bool)
+            result("success")
         } else if ("exitApp" == call.method) {
             exit(0)
         }

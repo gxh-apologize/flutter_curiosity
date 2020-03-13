@@ -6,7 +6,7 @@ import AssetsLibrary
 
 class PicturePicker: NSObject, TZImagePickerControllerDelegate {
     
-    class func openPicker(arguments: [AnyHashable : Any], viewController: UIViewController, result: FlutterResult) {
+    class func openPicker(_ arguments: [AnyHashable : Any], _ viewController: UIViewController, _ result: FlutterResult) {
         print("LogInfo\(arguments)")
         let maxSelectNum = (arguments["maxSelectNum"] as! NSNumber).intValue
         let minSelectNum = (arguments["minSelectNum"] as! NSNumber).intValue
@@ -158,7 +158,7 @@ class PicturePicker: NSObject, TZImagePickerControllerDelegate {
         
     }
     
-    class func openCamera( arguments: [AnyHashable : Any], viewController: UIViewController, result: FlutterResult) {
+    class func openCamera(_ arguments: [AnyHashable : Any],_ viewController: UIViewController,_ result: FlutterResult) {
         //   print("LogInfo\(arguments)")
         let authStatus: AVAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)
         if authStatus == .restricted || authStatus == .denied {
@@ -199,7 +199,7 @@ class PicturePicker: NSObject, TZImagePickerControllerDelegate {
     }
     
     /// 处理原图数据
-    class func resultOriginalPhotoData( data: Data, phAsset asset: PHAsset, isGIF: Bool, quality: CGFloat) -> [AnyHashable : Any]? {
+    class func resultOriginalPhotoData(_ data: Data, _ asset: PHAsset,_ isGIF: Bool, _ quality: CGFloat) -> [AnyHashable : Any]? {
         if createCache(){}
         var photo: [AnyHashable : Any] = [:]
         var filename: String? = nil
@@ -244,7 +244,7 @@ class PicturePicker: NSObject, TZImagePickerControllerDelegate {
         
     }
     
-   class func resultImage( image: UIImage, asset: PHAsset, quality: CGFloat) -> [AnyHashable : Any]? {
+   class func resultImage(_ image: UIImage, _ asset: PHAsset, _ quality: CGFloat) -> [AnyHashable : Any]? {
         if  createCache(){ }
         var photo: [AnyHashable : Any] = [:]
         var filename: String? = nil
@@ -261,7 +261,7 @@ class PicturePicker: NSObject, TZImagePickerControllerDelegate {
             filePath += "\(NSTemporaryDirectory())PicturePickerCaches/\(URL(fileURLWithPath: filename ?? "").deletingPathExtension().absoluteString).jpg"
         }
         let writeData = image.jpegData(compressionQuality: quality / 100)
-        writeData.write(toFile: filePath, atomically: true)
+    writeData?.write(toFile: filePath, atomically: true)
         
         photo["path"] = filePath
         photo["width"] = NSNumber(value: Float(image.size.width))
@@ -278,7 +278,7 @@ class PicturePicker: NSObject, TZImagePickerControllerDelegate {
     }
     
     /// 视频数据
-   class func resultVideo(outputPath: String, asset: PHAsset, cover coverImage: UIImage, quality: CGFloat) -> [AnyHashable : Any]? {
+    class func resultVideo(_ outputPath:String, _ asset:PHAsset, _ cover, coverImage:UIImage, _ quality: CGFloat) -> [AnyHashable : Any]? {
         var video: [AnyHashable : Any] = [:]
         video["path"] = outputPath
         var size: Int? = nil
@@ -301,7 +301,7 @@ class PicturePicker: NSObject, TZImagePickerControllerDelegate {
    class func createCache() -> Bool {
         let path = "\(NSTemporaryDirectory())PicturePickerCaches"
         let fileManager = FileManager.default
-        if FileUtils.isDirectory(path: path) {
+    if FileUtils.isDirectory(path) {
             //先判断目录是否存在，不存在才创建
             var res = false
             do {

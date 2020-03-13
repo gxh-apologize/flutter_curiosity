@@ -38,20 +38,20 @@ class NativeUtils  {
     }
     
     //Log
-    class  func log(info: Any?) {
+    class  func log(_ info: Any?) {
         if let info = info {
             print("Curiosity--- \(info)")
         }
     }
     
     //跳转到AppStore
-    class func goToMarket(id: String) {
+    class func goToMarket(_ id: String) {
         let url = "itms-apps://itunes.apple.com/us/app/id"+id
         UIApplication.shared.openURL(URL(string: url)!)
         
     }
     //设置Cookie
-    class func setCookie(props: [AnyHashable : Any]?) {
+    class func setCookie(_ props: [AnyHashable : Any]?) {
         
         let properties: [AnyHashable : Any] = [
             AnyHashable(HTTPCookiePropertyKey.name):props?["name"] as Any,
@@ -95,6 +95,20 @@ class NativeUtils  {
             
         }
         return cookies
+    }
+    class func callPhone(_ phoneNumber: String?, _ directDial: Bool) {
+        if directDial {
+            if let url = URL(string: "tel://" + (phoneNumber ?? "")) {
+                UIApplication.shared.openURL(url)
+            }
+        } else {
+            let callWebview = UIWebView()
+            if let url = URL(string: "tel:" + (phoneNumber ?? "")) {
+                callWebview.loadRequest(URLRequest(url: url))
+            }
+            UIApplication.shared.keyWindow?.addSubview(callWebview)
+        }
+        
     }
     
 }

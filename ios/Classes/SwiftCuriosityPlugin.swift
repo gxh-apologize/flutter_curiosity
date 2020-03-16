@@ -2,6 +2,9 @@ import Flutter
 import UIKit
 
 public class SwiftCuriosityPlugin: NSObject, FlutterPlugin {
+    private var viewController: UIViewController
+    private var call: FlutterMethodCall
+    
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "Curiosity", binaryMessenger: (registrar.messenger()))
         
@@ -12,9 +15,6 @@ public class SwiftCuriosityPlugin: NSObject, FlutterPlugin {
         
     }
     
-    private var viewController: UIViewController
-    private var call: FlutterMethodCall
-    
     public func handle(_call: FlutterMethodCall, result: @escaping FlutterResult) {
         let arguments=call.arguments as! [AnyHashable : Any]
         call = _call
@@ -23,10 +23,10 @@ public class SwiftCuriosityPlugin: NSObject, FlutterPlugin {
         utils(arguments:arguments,result: result)
     }
     
-    
-    public  init(_viewController: UIViewController) {
+    public init(_viewController: UIViewController) {
         super.init()
         viewController = _viewController
+
     }
     
     func gallery(arguments: [AnyHashable : Any], result: FlutterResult) {

@@ -31,7 +31,7 @@ class App extends StatelessWidget {
           RaisedButton(
               onPressed: () {
 //                select();
-                NativeUtils.callPhone('13282830824');
+                NativeUtils.openUrl('http://www.baidu.com');
 //                scan(context);
               },
               child: Text('按钮'))

@@ -7,18 +7,18 @@ let cachePath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomai
 class FileUtils {
     // 删除沙盒指定文件或文件夹
     class func deleteFile(_ path: String) {
-        if isDirectoryExist(path: path) {
+        if isDirectoryExist(path) {
             //移除文件
             try! fileManager.removeItem(atPath: path)
         }
     }
     // 删除沙盒指定文件夹内容
     class func deleteDirectory(_ path: String) {
-        if isDirectoryExist(path: path) {
+        if isDirectoryExist(path) {
             // 获取该路径下面的文件名
             let childrenFiles = fileManager.subpaths(atPath: path )
             for fileName in childrenFiles ?? [] {
-                deleteFile(path: URL(fileURLWithPath: path ).appendingPathComponent(fileName).absoluteString)
+                deleteFile(URL(fileURLWithPath: path ).appendingPathComponent(fileName).absoluteString)
             }
         }
     }
@@ -49,10 +49,10 @@ class FileUtils {
         do {
             let files = try fileManager.contentsOfDirectory(atPath: path)
             for file in files {
-                fileSize = fileSize + fileSizeAtPath(filePath: path + "/\(file)")
+                fileSize = fileSize + fileSizeAtPath(path + "/\(file)")
             }
         }catch{
-            fileSize = fileSize + fileSizeAtPath(filePath: path)
+            fileSize = fileSize + fileSizeAtPath(path)
         }
         var resultSize = ""
         if fileSize >= 1024.0*1024.0{
@@ -85,31 +85,27 @@ class FileUtils {
     
     //获取目录下所有文件和文件夹名字
     class func getDirectoryAllName(_ path: String) -> [AnyHashable] {
-        var nameList: [AnyHashable] = []
-        if !isDirectoryExist(path: path) {
+        var nameList: [String] = []
+        if !isDirectoryExist(path) {
             nameList.append("path not exist")
             return nameList
         }
-        if !isDirectory(path: path) {
+        if !isDirectory(path) {
             nameList.append("path not exist")
             return nameList
         }
-        let dirEnum = fileManager.enumerator(atPath: path )
-        //列举目录内容，可以遍历子目录
-        let name: String
-        while (name == dirEnum?.nextObject() as? String )  {
-            if self.isDirectoryExist(path: name) == true {
-                dirEnum?.skipDescendants()
-            }
-            nameList.append(name)
+        do {
+            nameList = try fileManager.contentsOfDirectory(atPath:path)
+        } catch{
+            nameList.append("error")
         }
         return nameList
     }
     
     //解压文件
     class func unZipFile(_ filePath: String) -> String {
-        if self.isDirectoryExist(path: filePath) {
-            SSZipArchive.unzipFile(atPath: filePath, toDestination: (filePath as NSString).substring(to: (filePath.count ?? 0) - ((filePath.components(separatedBy: "/").last).count ?? 0)))
+        if self.isDirectoryExist(filePath) {
+            SSZipArchive.unzipFile(atPath: filePath, toDestination: (filePath as NSString).substring(to: (filePath.count ) - ((filePath.components(separatedBy: "/").last)?.count ?? 0)))
             return "Success"
         } else {
             return "NotFile"
@@ -118,7 +114,7 @@ class FileUtils {
     class func createFolder(_ folderName: NSString,folderPath: NSString) -> NSString {
         let path = "\(folderPath)/\(folderName)"
         // 不存在的路径才会创建
-        if (!isDirectoryExist(path: path)) {
+        if (!isDirectoryExist(path)) {
             //withIntermediateDirectories为ture表示路径中间如果有不存在的文件夹都会创建
             try! fileManager.createDirectory(atPath: path,withIntermediateDirectories: true, attributes: nil)
         }

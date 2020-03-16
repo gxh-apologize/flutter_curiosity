@@ -203,7 +203,7 @@ object FileUtils {
      *
      * @return
      */
-    fun getDirectoryAllName(call: MethodCall): MutableList<String> {
+    fun getDirectoryAllName(): MutableList<String> {
         val path = call.argument<String>("path")
         assert(path != null)
         val isAbsolutePath = Objects.requireNonNull<Boolean>(call.argument("isAbsolutePath"))

@@ -122,7 +122,7 @@ class ScanView: UIView,AVCaptureMetadataOutputObjectsDelegate {
             let data = metadataObjects[0] as? AVMetadataMachineReadableCodeObject
             let value = data?.stringValue
             if (value?.count ?? 0) != 0  {
-                scanEvent.sendEvent(event: ScanUtils.scanDataToMap(data: data!))
+                scanEvent.sendEvent(event: ScanUtils.scanDataToMap(data!))
                 
             }
         }

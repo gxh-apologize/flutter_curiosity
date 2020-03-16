@@ -7,7 +7,7 @@ class ScanUtils {
         //加载文件
         let fh = FileHandle(forReadingAtPath: path )
         let data = fh?.readDataToEndOfFile()
-        result(getCode(data: data!))
+        result(getCode(data!))
     }
     //图片urls识别
     class func scanImageUrl(_ url: String, _ result: FlutterResult) {
@@ -19,12 +19,12 @@ class ScanUtils {
             }
         } catch {
         }
-        result(getCode(data: data!))
+        result(getCode(data!))
     }
     //内存图片识别
     class func scanImageMemory(_ uint8list: FlutterStandardTypedData, _  result: FlutterResult) {
         //       let uint8list = call.arguments.value(forKey: "") as? FlutterStandardTypedData
-        result(getCode(data: uint8list.data))
+        result(getCode(uint8list.data))
     }
     //获取二维码数据
     class func getCode(_ data: Data) -> [AnyHashable : Any] {
